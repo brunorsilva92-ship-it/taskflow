@@ -1,23 +1,30 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "../componentes/Header";
 import ListaTarefas from "../componentes/ListaTarefas";
 import ModalTarefa from "../componentes/ModalTarefa";
 
+const URL_API = 'https://6a85aab49c451dc67a63ebbb.mockapi.io/api/tarefas';
+
 function Kanban() {
-  const [tarefas, setTarefas] = useState(() => {
-    const tarefasSalvas = localStorage.getItem("tarefas");
-    if (!tarefasSalvas) return [];
-    try {
-      const tarefasConvertidas = JSON.parse(tarefasSalvas);
-      return Array.isArray(tarefasConvertidas) ? tarefasConvertidas : [];
-    } catch {
-      return [];
-    }
-  });
+  const [tarefas, setTarefas] = useState([]);
 
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
   const [colunaAtiva, setColunaAtiva] = useState("afazer");
+
+  useEffect(() => {
+    async function carregarTarefas() {
+      try {
+        const resposta = await axios.get(URL_API);
+        setTarefas(resposta.data);
+      } catch (erro) {
+        console.error("Erro ao carregar tarefas da API:", erro);
+      }
+    }
+
+    carregarTarefas();
+  }, []);
 
   useEffect(() => {
     const pendentes = tarefas.filter((t) => t.coluna === "afazer").length;
@@ -27,8 +34,6 @@ function Kanban() {
     } else {
       document.title = "TaskFlow";
     }
-
-    localStorage.setItem("tarefas", JSON.stringify(tarefas));
   }, [tarefas]);
 
   function abrirModalCriar(coluna) {
@@ -78,7 +83,7 @@ function Kanban() {
   return (
     <>
       <Header
-        titulo="TaskFlow"
+        titulo="TaskFlow testando"
         subtitulo="Gerencie suas tarefas"
         tarefas={tarefas}
       />
