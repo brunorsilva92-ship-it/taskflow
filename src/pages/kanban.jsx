@@ -4,37 +4,35 @@ import Header from "../componentes/Header";
 import ListaTarefas from "../componentes/ListaTarefas";
 import ModalTarefa from "../componentes/ModalTarefa";
 
-const URL_API = 'https://6a85aab49c451dc67a63ebbb.mockapi.io/api/tarefas';
-
 function Kanban() {
+
+  const URL_API = 'https://6a85aab49c451dc67a63ebbb.mockapi.io/api/tarefas';
   const [tarefas, setTarefas] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
 
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
   const [colunaAtiva, setColunaAtiva] = useState("afazer");
 
   useEffect(() => {
-    async function carregarTarefas() {
+    async function carregarTarefas( ) {
       try {
+        setCarregando(true);
+        setErro('');
+        
         const resposta = await axios.get(URL_API);
         setTarefas(resposta.data);
-      } catch (erro) {
-        console.error("Erro ao carregar tarefas da API:", erro);
-      }
+
+      } catch (e) {
+        setErro('Erro ao carregar tarefas. Verifique a conexao.');
+        console.error(e);
+    } finally {
+      setCarregando(false);
     }
-
-    carregarTarefas();
-  }, []);
-
-  useEffect(() => {
-    const pendentes = tarefas.filter((t) => t.coluna === "afazer").length;
-
-    if (pendentes > 0) {
-      document.title = `(${pendentes}) TaskFlow`;
-    } else {
-      document.title = "TaskFlow";
-    }
-  }, [tarefas]);
+  }
+  carregarTarefas();
+}, []);
 
   function abrirModalCriar(coluna) {
     setTarefaEditando(null);
@@ -47,22 +45,50 @@ function Kanban() {
     setModalAberto(true);
   }
 
-  function salvarTarefa(dados) {
-    if (dados.id) {
-      setTarefas(
-        tarefas.map((t) => (t.id === dados.id ? { ...t, ...dados } : t))
+  async function salvarTarefa(dados) {
+    try {
+      if (dados.id !== undefined) {
+        const { data: tarefaEditada } = await axios.put(URL_API + '/' + dados.id,
+        {
+          texto:      dados.texto,
+          prioridade: dados.prioridade,
+          cidade:     dados.cidade,
+          coluna:     dados.coluna,
+        }
       );
-    } else {
-      setTarefas([...tarefas, { ...dados, id: Date.now(), concluida: false }]);
-    }
-  }
+      setTarefas(tarefasAtuais => tarefasAtuais.map(t => t.id === dados.id ? tarefaEditada : t));
 
-  const deletarTarefa = (id) => {
-    const confirmado = window.confirm("Tem certeza que deseja excluir essa tarefa?");
-    if (confirmado) {
-      setTarefas(tarefas.filter((tarefa) => tarefa.id !== id));
+      } else {
+      const { data: novaTarefa } = await axios.post(URL_API, {
+        texto:      dados.texto,
+        prioridade: dados.prioridade,
+        cidade:     dados.cidade,
+        coluna:     dados.coluna,
+      });
+      setTarefas(tarefasAtuais => [...tarefasAtuais, novaTarefa]);
     }
-  };
+  } catch (e) {
+    setErro('Erro ao salvar tarefa. Tente novamente.');
+    console.error(e);
+  }
+}
+
+async function deletarTarefa(id) {
+    const confirmado = window.confirm('Tem certeza que deseja deletar esta tarefa?');
+    if (!confirmado) return;
+
+  try {
+    await axios.delete(URL_API + '/' + id);
+
+    setTarefas(tarefasAtuais =>
+      tarefasAtuais.filter(t => t.id !== id)
+    );
+
+  } catch (e) {
+    setErro('Erro ao deletar tarefa. Tente novamente.');
+    console.error(e);
+  }
+}
 
   const alternarConcluida = (id) => {
     setTarefas(
@@ -80,6 +106,22 @@ function Kanban() {
     );
   };
 
+  /*async function moverTarefa (id, novaColuna) {
+  try {
+    const { data: tarefaMovida } = await axios.patch(URL_API + '/' + id, { coluna: novaColuna });
+
+    setTarefas(tarefasAtuais =>
+      tarefasAtuais.map(t =>
+        t.id === id ? tarefaMovida : t
+      )
+    );
+
+  } catch (e) {
+    setErro('Erro ao mover tarefa. Tente novamente.');
+    console.error(e);
+  }
+}*/
+
   return (
     <>
       <Header
@@ -89,6 +131,9 @@ function Kanban() {
       />
 
       <main className="container">
+        {carregando && (<p style={{ textAlign:'center', color:'#94A3B8' }}>Carregando tarefas...</p>)}
+        {erro && (<p style={{ textAlign:'center', color:'#EF4444' }}>{erro}</p>)}
+        {!carregando && !erro && (
         <div className="kanban-quadro">
           {/* ── COLUNA 1: A FAZER ────────────────────────────────────────── */}
           <div className="kanban-coluna">
@@ -172,6 +217,7 @@ function Kanban() {
             />
           </div>
         </div>
+        )}
       </main>
 
       <ModalTarefa
