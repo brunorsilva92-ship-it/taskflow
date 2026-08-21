@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "../componentes/Header";
 import ListaTarefas from "../componentes/ListaTarefas";
 import ModalTarefa from "../componentes/ModalTarefa";
+import { OrbitProgress } from "react-loading-indicators";
 
 function Kanban() {
 
@@ -59,12 +60,7 @@ function Kanban() {
       setTarefas(tarefasAtuais => tarefasAtuais.map(t => t.id === dados.id ? tarefaEditada : t));
 
       } else {
-      const { data: novaTarefa } = await axios.post(URL_API, {
-        texto:      dados.texto,
-        prioridade: dados.prioridade,
-        cidade:     dados.cidade,
-        coluna:     dados.coluna,
-      });
+      const { data: novaTarefa } = await axios.post(URL_API, dados);
       setTarefas(tarefasAtuais => [...tarefasAtuais, novaTarefa]);
     }
   } catch (e) {
@@ -98,17 +94,9 @@ async function deletarTarefa(id) {
     );
   };
 
-  const moverTarefa = (id, novaColuna) => {
-    setTarefas(
-      tarefas.map((tarefa) =>
-        tarefa.id === id ? { ...tarefa, coluna: novaColuna } : tarefa
-      )
-    );
-  };
-
-  /*async function moverTarefa (id, novaColuna) {
+async function moverTarefa (id, novaColuna) {
   try {
-    const { data: tarefaMovida } = await axios.patch(URL_API + '/' + id, { coluna: novaColuna });
+    const { data: tarefaMovida } = await axios.put(URL_API + '/' + id, { coluna: novaColuna });
 
     setTarefas(tarefasAtuais =>
       tarefasAtuais.map(t =>
@@ -120,18 +108,21 @@ async function deletarTarefa(id) {
     setErro('Erro ao mover tarefa. Tente novamente.');
     console.error(e);
   }
-}*/
+}
 
   return (
     <>
       <Header
-        titulo="TaskFlow testando"
+        titulo="TaskFlow"
         subtitulo="Gerencie suas tarefas"
         tarefas={tarefas}
       />
 
       <main className="container">
-        {carregando && (<p style={{ textAlign:'center', color:'#94A3B8' }}>Carregando tarefas...</p>)}
+        {carregando && (
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
+            <OrbitProgress color="#0098ff" size="medium" text="" textColor="" />
+          </div>)}
         {erro && (<p style={{ textAlign:'center', color:'#EF4444' }}>{erro}</p>)}
         {!carregando && !erro && (
         <div className="kanban-quadro">
