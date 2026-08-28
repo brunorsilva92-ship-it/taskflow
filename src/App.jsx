@@ -9,10 +9,7 @@ import RotaPrivada from "./componentes/RotaPrivada";
 function App() {
   return (
     <div className="app-layout">
-      {/* Sidebar fica FORA do Routes — aparece em todas as páginas */}
       <Sidebar />
-
-      {/* Conteúdo principal — muda conforme a URL */}
       <main className="app-conteudo">
         <Routes>
           <Route path="/" element={<RotaPrivada><Kanban/></RotaPrivada>} />

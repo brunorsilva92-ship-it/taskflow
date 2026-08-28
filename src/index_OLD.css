@@ -1,17 +1,9 @@
-/* ═══════════════════════════════════════════════════════════
-   TASKFLOW — style.css
-   Programador Full Stack · SENAI CTGAS-ER · Prof. Alan Glei
-   Semana 2 (HTML + CSS) + Semana 3 (JavaScript no Navegador)
-   ═══════════════════════════════════════════════════════════ */
-
-/* ── 1. RESET ─────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ── 2. BASE ──────────────────────────────────────────────── */
 body {
   background-color: #0D1B2A;
   color: white;
@@ -23,14 +15,12 @@ body {
   flex-direction: column;
 }
 
-/* ── 3. CONTAINER ─────────────────────────────────────────── */
 .container {
   max-width: 1080px;
   margin: 4px auto;
   padding: 4px 16px;
 }
 
-/* ── 4. HEADER ────────────────────────────────────────────── */
 header {
   background-color: #1B2A3B;
   border-bottom: 1px solid #1E3A5F;
@@ -60,7 +50,6 @@ header .container {
   font-size: 0.85rem;
 }
 
-/* ── 5. CONTADORES ────────────────────────────────────────── */
 #contadores {
   display: flex;
   align-items: center;
@@ -79,13 +68,11 @@ header .container {
   user-select: none;
 }
 
-/* ── 6. MAIN ──────────────────────────────────────────────── */
 main {
   padding: 28px 0;
   flex: 1;
 }
 
-/* ── 7. FORMULÁRIO ────────────────────────────────────────── */
 #formulario {
   margin-bottom: 20px;
 }
@@ -168,7 +155,6 @@ main {
   outline-offset: 2px;
 }
 
-/* ── 8. CONTROLES (FILTROS) ───────────────────────────────── */
 #controles {
   margin-bottom: 20px;
 }
@@ -203,7 +189,6 @@ main {
   font-weight: 700;
 }
 
-/* ── 9. LISTA DE TAREFAS ──────────────────────────────────── */
 #lista-tarefas {
   list-style: none;
   display: flex;
@@ -211,7 +196,6 @@ main {
   gap: 8px;
 }
 
-/* ── 10. TAREFA ───────────────────────────────────────────── */
 .tarefa {
   display: flex;
   justify-content: space-between;
@@ -230,12 +214,10 @@ main {
   background-color: #1E3A5F;
 }
 
-/* Prioridades — cor da borda esquerda */
 .tarefa.alta   { border-left-color: #EF4444; }
 .tarefa.media  { border-left-color: #F5A623; }
 .tarefa.baixa  { border-left-color: #22C55E; }
 
-/* Estado concluída */
 .tarefa.concluida {
   opacity: 0.5;
 }
@@ -245,7 +227,6 @@ main {
   color: #94A3B8;
 }
 
-/* ── 11. TEXTO DA TAREFA ──────────────────────────────────── */
 .texto-tarefa {
   flex: 1;
   font-size: 1rem;
@@ -253,7 +234,6 @@ main {
   word-break: break-word;
 }
 
-/* ── 12. BADGE DE PRIORIDADE ─────────────────────────────── */
 .badge-prioridade {
   font-size: 0.7rem;
   font-weight: 700;
@@ -269,7 +249,6 @@ main {
 .badge-media   { background-color: rgba(245, 166, 35, 0.15); color: #F5A623; }
 .badge-baixa   { background-color: rgba(34, 197, 94, 0.15); color: #22C55E; }
 
-/* ── 13. BOTÃO DELETAR ────────────────────────────────────── */
 .btn-deletar {
   background: none;
   border: none;
@@ -288,7 +267,6 @@ main {
   background-color: rgba(239, 68, 68, 0.1);
 }
 
-/* ── 14. MENSAGEM VAZIA ───────────────────────────────────── */
 .msg-vazia {
   text-align: center;
   color: #4A6480;
@@ -301,7 +279,6 @@ main {
   display: none;
 }
 
-/* ── 15. FOOTER ───────────────────────────────────────────── */
 footer {
   padding: 20px 16px;
   text-align: center;

@@ -89,4 +89,3 @@ async function buscarUsuario(id) {
 }
 
 export default TesteFetch;
-
