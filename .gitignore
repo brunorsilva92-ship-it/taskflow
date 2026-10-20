@@ -1,0 +1,13 @@
+# Dependências do Node (o motivo dos 10k arquivos)
+node_modules/
+
+# Arquivos de Build/Produção
+dist/
+build/
+
+# Variáveis de ambiente
+
+
+# Logs e Cache
+*.log
+.DS_Store
