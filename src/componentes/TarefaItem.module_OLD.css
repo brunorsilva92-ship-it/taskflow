@@ -62,16 +62,14 @@
 }
 
 .badge-prioridade {
-  font-size: 0.7rem;
-  font-weight: 700;
+  color: #ffffff;
   padding: 2px 8px;
-  border-radius: 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  flex-shrink: 0;
+  /* Não defina background-color ou background aqui! */
 }
-
-.badge-alta    { background-color: rgba(239, 68, 68, 0.15); color: #EF4444; }
+/*.badge-alta    { background-color: rgba(239, 68, 68, 0.15); color: #EF4444; }
 .badge-media   { background-color: rgba(245, 166, 35, 0.15); color: #F5A623; }
-.badge-baixa   { background-color: rgba(34, 197, 94, 0.15); color: #22C55E; }
+.badge-baixa   { background-color: rgba(34, 197, 94, 0.15); color: #22C55E; }*/

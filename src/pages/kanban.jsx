@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../api";
+import api, { mensagensDeErro } from "../api";
 import Header from "../componentes/Header";
 import ListaTarefas from "../componentes/ListaTarefas";
 import ModalTarefa from "../componentes/ModalTarefa";
@@ -14,7 +14,7 @@ function Kanban() {
 
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
-  const { usuario } = useAuth();
+  //const { usuario } = useAuth();
 
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
@@ -79,13 +79,9 @@ async function salvarTarefa(dados) {
 async function deletarTarefa(id) {
   try {
     await api.delete(`/tarefas/${id}`);
-
-    setTarefas(
-      tarefas.filter(t => t.id !== id)
-    );
-
+    setTarefas(tarefas.filter(t => t.id !== id));
   } catch (e) {
-    setErro(e.response?.data?.erro || 'Erro ao deletar tarefa. Tente novamente.');
+    alert(mensagensDeErro(e).join("\n")); 
     console.error(e);
   }
 }
@@ -95,19 +91,23 @@ async function moverTarefa(id, novaColuna) {
     const tarefaAtual = tarefas.find(t => t.id === id);
     if (!tarefaAtual) return;
 
-    const resposta = await api.put(`/tarefas/${id}`, {
-      ...tarefaAtual,
+    const corpo = {
+      texto: tarefaAtual.texto,
       coluna: novaColuna,
-      usuarioId: usuario.id,
-    });
+      usuarioId: tarefaAtual.usuario_id,
+      prioridadeId: tarefaAtual.prioridade_id,
+      projetoId: tarefaAtual.projeto_id,
+    };
 
-    const tarefaAtualizada = { ...resposta.data, concluida: novaColuna === 'concluido' };
+    console.log('Enviando:', corpo);
+
+    const resposta = await api.put(`/tarefas/${id}`, corpo);
+
     setTarefas(tarefasAtuais =>
-      tarefasAtuais.map(t => (t.id === id ? tarefaAtualizada : t))
+      tarefasAtuais.map(t => (t.id === id ? resposta.data : t))
     );
-
   } catch (e) {
-    setErro(e.response?.data?.erro || 'Erro ao mover tarefa. Tente novamente.');
+    alert(mensagensDeErro(e).join("\n"));
     console.error(e);
   }
 }
