@@ -6,7 +6,7 @@ dist/
 build/
 
 # Variáveis de ambiente
-
+.env
 
 # Logs e Cache
 *.log
