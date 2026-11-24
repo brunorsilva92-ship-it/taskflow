@@ -83,14 +83,13 @@ function ModalTarefa({
         <h2>{tarefa ? "Editar tarefa" : "Nova tarefa"}</h2>
 
         <div className={styles.campo}>
-          <label htmlFor="tarefa-texto">Tarefa</label>
-          <input
+        <label htmlFor="tarefa-texto">Tarefa</label>
+        <textarea
             id="tarefa-texto"
             placeholder="Descreva a tarefa"
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
-            autoFocus
-          />
+        />
         </div>
 
         <div className={styles.campo}>

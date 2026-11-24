@@ -2,8 +2,7 @@ import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ListaTarefas from "./ListaTarefas";
- 
-// Três tarefas no formato que a API devolve
+
 function tarefasExemplo() {
   return [
     { id: 1, texto: 'Modelar o banco', prioridade: 'Alto',
@@ -53,6 +52,4 @@ describe('ListaTarefas', () => {
  
     expect(onDeletar).toHaveBeenCalledWith(2);
   });
-
- 
 });
