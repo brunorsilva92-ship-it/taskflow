@@ -28,6 +28,7 @@ function ListaTarefas({
                 key={tarefa.id}
                 texto={tarefa.texto}
                 concluida={tarefa.concluida}
+                usuario={tarefa.usuario}
                 corPrioridade={prioridadeObj?.cor || '#94a3b8'}
                 rotuloPrioridade={prioridadeObj?.descricao || 'Média'}
                 onDeletar={() => onDeletar(tarefa.id)}

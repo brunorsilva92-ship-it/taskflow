@@ -1,5 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ModalTarefa from './ModalTarefa';
 import { AuthProvider } from '../contexts/AuthContext';
 
@@ -57,7 +58,7 @@ describe('ModalTarefa', () => {
       id: 7,
       texto: 'Revisar a API',
       coluna: 'andamento',
-      idprioridade: 1,
+      prioridadeId: 1,
       usuario_id: 2,
       projeto_id: 20,
     };
@@ -67,5 +68,45 @@ describe('ModalTarefa', () => {
     expect(screen.getByRole('heading', { name: 'Editar tarefa' })).toBeInTheDocument();
     expect(screen.getByLabelText('Tarefa')).toHaveValue('Revisar a API');
     expect(screen.getByLabelText('Responsável')).toHaveValue('2');
+  });
+
+  test('o que a pessoa digita aparece no campo', async () => {
+    const user = userEvent.setup();
+    abrirModal();
+
+    const campo = screen.getByLabelText('Tarefa');
+    await user.type(campo, 'Nova tarefa de teste');
+    expect(campo).toHaveValue('Nova tarefa de teste');
+  });
+
+  test('Cancelar e Esc chamam onFechar', async () => {
+    const user = userEvent.setup();
+    const onFechar = vi.fn();
+    abrirModal({ onFechar });
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+    await user.keyboard('{Escape}');
+
+    expect(onFechar).toHaveBeenCalledTimes(2);
+  });
+
+  test('Salvar envia os dados e fecha o modal', async () => {
+    const user = userEvent.setup();
+    const onSalvar = vi.fn().mockResolvedValue();
+    const onFechar = vi.fn();
+    abrirModal({ onSalvar, onFechar, coluna: 'afazer' });
+
+    await user.type(screen.getByLabelText('Tarefa'), 'Nova tarefa de teste');
+    await user.selectOptions(screen.getByLabelText('Prioridade'), 'Alto');
+    await user.click(screen.getByRole('button', { name: 'Salvar' }));
+
+    expect(onSalvar).toHaveBeenCalledWith({
+      texto: 'Nova tarefa de teste',
+      coluna: 'afazer',
+      prioridadeId: 1,
+      usuarioId: 1,
+      projetoId: 10,
+    });
+    expect(onFechar).toHaveBeenCalledTimes(1);
   });
 });

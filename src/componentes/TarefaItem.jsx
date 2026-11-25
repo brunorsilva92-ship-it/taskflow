@@ -3,6 +3,7 @@ import styles from "./TarefaItem.module.css";
 function TarefaItem({
   texto,
   concluida = false,
+  usuario = null,
   corPrioridade = "#94a3b8",
   rotuloPrioridade = "",
   onDeletar,
@@ -32,6 +33,8 @@ function TarefaItem({
         >
           {texto}
         </span>
+
+        <span>{usuario || 'Sem responsável'}</span>
       </div>
 
       <span 
