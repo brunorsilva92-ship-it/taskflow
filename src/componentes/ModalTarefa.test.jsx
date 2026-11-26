@@ -109,4 +109,20 @@ describe('ModalTarefa', () => {
     });
     expect(onFechar).toHaveBeenCalledTimes(1);
   });
+
+  test('A API recusa: mostra os erros e não fecha o modal', async () => {
+    const user = userEvent.setup();
+    const erro400 = {
+      response: { data: { erro: { detalhes: ['texto é obrigatório'] } } },
+    };
+    const onSalvar = vi.fn().mockRejectedValue(erro400);
+    const onFechar = vi.fn();
+    abrirModal({ onSalvar, onFechar});
+
+    await user.click(screen.getByRole('button', { name: 'Salvar' }));
+
+    expect(await screen.findByText('texto é obrigatório')).toBeInTheDocument();
+    expect(onFechar).not.toHaveBeenCalled();
+  });
+
 });

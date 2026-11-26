@@ -146,6 +146,7 @@ async function alternarConcluida(id) {
                 <button
                   className="kanban-btn-add"
                   onClick={() => abrirModalCriar("afazer")}
+                  title="Nova tarefa em A Fazer"
                 >
                   +
                 </button>
@@ -174,6 +175,7 @@ async function alternarConcluida(id) {
                 <button
                   className="kanban-btn-add"
                   onClick={() => abrirModalCriar("andamento")}
+                  title="Nova tarefa em Em Andamento"
                 >
                   +
                 </button>
@@ -202,6 +204,7 @@ async function alternarConcluida(id) {
                 <button
                   className="kanban-btn-add"
                   onClick={() => abrirModalCriar("concluido")}
+                  title="Nova tarefa em Concluído"
                 >
                   +
                 </button>
